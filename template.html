@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Portfolio Generator</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body class="generator-page">
+
+    <div class="generator-wrapper">
+
+        <div class="generator-card">
+
+            <div class="generator-icon">
+                ✨
+            </div>
+
+            <h1>
+                AI Portfolio Generator
+            </h1>
+
+            <p class="generator-subtitle">
+                Turn your resume into a professional portfolio using AI.
+            </p>
+
+            {% if error %}
+
+            <div class="error-box">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+            <form method="POST">
+
+                <label for="resume">
+                    Upload Your Resume
+                </label>
+
+                <textarea
+                    id="resume"
+                    name="resume"
+                    placeholder="Paste your complete resume here..."
+                    required></textarea>
+
+                <button type="submit">
+                    Generate My Portfolio
+                </button>
+
+            </form>
+
+            <p class="powered">
+                Powered by Gemini AI
+            </p>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
