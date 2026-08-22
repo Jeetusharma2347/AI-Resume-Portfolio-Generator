@@ -1,24 +1,20 @@
 import re
+from pypdf import PdfReader
 
 
 MIN_LENGTH = 50
 
 
 def clean_resume(text):
+    if not text:
+        return ""
 
     lines = text.splitlines()
-
     cleaned_lines = []
 
     for line in lines:
-
         line = line.strip()
-
-        line = re.sub(
-            r"[ \t]+",
-            " ",
-            line
-        )
+        line = re.sub(r"[ \t]+", " ", line)
 
         if line:
             cleaned_lines.append(line)
@@ -26,8 +22,26 @@ def clean_resume(text):
     return "\n".join(cleaned_lines)
 
 
-def check_sections(text):
+def extract_pdf_text(pdf_file):
+    """
+    Extract text from uploaded PDF resume.
+    """
 
+    reader = PdfReader(pdf_file)
+    extracted_text = []
+
+    for page in reader.pages:
+        text = page.extract_text()
+
+        if text:
+            extracted_text.append(text)
+
+    final_text = "\n".join(extracted_text)
+
+    return clean_resume(final_text)
+
+
+def check_sections(text):
     sections = {
         "Name": False,
         "Headline": False,
@@ -42,7 +56,6 @@ def check_sections(text):
     lines = text.splitlines()
 
     for line in lines:
-
         line = line.strip().lower()
 
         if line.startswith("name:"):
