@@ -8,64 +8,400 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>AI Portfolio Generator</title>
+    <title>AI Resume Portfolio Generator</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
 
+    <style>
+
+        /* Main container */
+
+        .generator-container {
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 40px 20px;
+
+            background: linear-gradient(
+                135deg,
+                #eef2ff,
+                #f5f3ff
+            );
+        }
+
+
+        /* Generator card */
+
+        .generator-card {
+            width: 100%;
+            max-width: 800px;
+
+            background: white;
+
+            padding: 45px;
+
+            border-radius: 24px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, 0.12);
+        }
+
+
+        /* Heading */
+
+        .generator-card h1 {
+            text-align: center;
+
+            font-size: 42px;
+
+            margin-bottom: 10px;
+
+            color: #2563eb;
+        }
+
+
+        /* Subtitle */
+
+        .subtitle {
+            text-align: center;
+
+            color: #6b7280;
+
+            margin-bottom: 35px;
+
+            font-size: 17px;
+        }
+
+
+        /* Error message */
+
+        .error {
+            background: #fee2e2;
+
+            color: #b91c1c;
+
+            padding: 14px 18px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+
+            font-weight: 600;
+        }
+
+
+        /* PDF upload box */
+
+        .upload-box {
+            border: 2px dashed #c7d2fe;
+
+            background: #f8faff;
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+            transition: 0.3s;
+        }
+
+
+        .upload-box:hover {
+            border-color: #6366f1;
+
+            background: #f5f3ff;
+        }
+
+
+        /* Upload icon */
+
+        .upload-icon {
+            font-size: 45px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .upload-box h3 {
+            color: #1f2937;
+
+            margin-bottom: 8px;
+        }
+
+
+        .upload-box p {
+            color: #6b7280;
+
+            margin-bottom: 18px;
+        }
+
+
+        /* File input */
+
+        .file-input {
+            display: block;
+
+            margin: auto;
+
+            max-width: 100%;
+        }
+
+
+        /* OR */
+
+        .or {
+            text-align: center;
+
+            color: #9ca3af;
+
+            font-weight: bold;
+
+            margin: 22px 0;
+        }
+
+
+        /* Label */
+
+        label {
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 10px;
+
+            color: #374151;
+        }
+
+
+        /* Textarea */
+
+        textarea {
+            width: 100%;
+
+            min-height: 250px;
+
+            resize: vertical;
+
+            padding: 18px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 14px;
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+
+        textarea:focus {
+            border-color: #6366f1;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(99, 102, 241, 0.12);
+        }
+
+
+        /* Generate button */
+
+        .generate-button {
+            width: 100%;
+
+            margin-top: 25px;
+
+            padding: 16px;
+
+            border: none;
+
+            border-radius: 14px;
+
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #7c3aed
+            );
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+
+        .generate-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(79, 70, 229, 0.3);
+        }
+
+
+        /* Information text */
+
+        .info {
+            text-align: center;
+
+            margin-top: 18px;
+
+            color: #6b7280;
+
+            font-size: 13px;
+        }
+
+
+        /* Responsive design */
+
+        @media (max-width: 600px) {
+
+            .generator-card {
+                padding: 25px;
+            }
+
+            .generator-card h1 {
+                font-size: 32px;
+            }
+
+            .subtitle {
+                font-size: 15px;
+            }
+
+            .upload-box {
+                padding: 22px;
+            }
+
+        }
+
+    </style>
+
 </head>
 
-<body class="generator-page">
 
-    <div class="generator-wrapper">
+<body>
 
-        <div class="generator-card">
 
-            <div class="generator-icon">
-                ✨
-            </div>
+<div class="generator-container">
 
-            <h1>
-                AI Portfolio Generator
-            </h1>
 
-            <p class="generator-subtitle">
-                Turn your resume into a professional portfolio using AI.
-            </p>
+    <div class="generator-card">
 
-            {% if error %}
 
-            <div class="error-box">
-                {{ error }}
-            </div>
+        <h1>
+            AI Resume Portfolio Generator
+        </h1>
 
-            {% endif %}
 
-            <form method="POST">
+        <p class="subtitle">
+            Transform your resume into a professional
+            portfolio using AI.
+        </p>
 
-                <label for="resume">
-                    Upload Your Resume
-                </label>
 
-                <textarea
-                    id="resume"
-                    name="resume"
-                    placeholder="Paste your complete resume here..."
-                    required></textarea>
+        {% if error %}
 
-                <button type="submit">
-                    Generate My Portfolio
-                </button>
-
-            </form>
-
-            <p class="powered">
-                Powered by Gemini AI
-            </p>
-
+        <div class="error">
+            {{ error }}
         </div>
 
+        {% endif %}
+
+
+        <form
+            method="POST"
+            enctype="multipart/form-data">
+
+
+            <!-- PDF UPLOAD -->
+
+            <div class="upload-box">
+
+                <div class="upload-icon">
+                    📄
+                </div>
+
+                <h3>
+                    Upload Your Resume
+                </h3>
+
+                <p>
+                    Upload your resume as a PDF file
+                </p>
+
+                <input
+                    type="file"
+                    name="resume_pdf"
+                    class="file-input"
+                    accept=".pdf,application/pdf">
+
+            </div>
+
+
+            <!-- OR -->
+
+            <div class="or">
+                OR
+            </div>
+
+
+            <!-- TEXT RESUME -->
+
+            <label for="resume">
+                Paste Your Resume
+            </label>
+
+
+            <textarea
+                id="resume"
+                name="resume"
+                placeholder="Paste your complete resume here..."></textarea>
+
+
+            <!-- GENERATE BUTTON -->
+
+            <button
+                type="submit"
+                class="generate-button">
+
+                Generate My Portfolio
+
+            </button>
+
+
+            <p class="info">
+
+                Supported format: PDF
+                •
+                You can also paste resume text
+
+            </p>
+
+
+        </form>
+
+
     </div>
+
+
+</div>
+
 
 </body>
 
